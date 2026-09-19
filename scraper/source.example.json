@@ -1,0 +1,5 @@
+{
+  "source": "replace-with-authorized-source",
+  "enabled": false,
+  "notes": "Configure only after verifying permission and terms for automated collection."
+}
