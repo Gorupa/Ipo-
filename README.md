@@ -1,18 +1,8 @@
-# IPO Ninja — Light Clean MVP
+# IPO Ninja — Final Light MVP
 
-A clean, lightweight Android MVP for tracking Indian IPOs.
+Clean Android project with a light, simple IPO tracker UI.
+Demo data only for the first reliable build.
 
-## Design
-- Light-first, calm, premium fintech UI
-- Simple card-based home
-- No dark theme
-- Demo/local IPO data for the first reliable build
-- No Retrofit, ViewModel, Navigation, Gson, or network dependencies
+The Android project deliberately has no Retrofit, ViewModel, Navigation, Gson, or network dependencies.
 
-## Build
-Open the `android` folder in Android Studio, or run the GitHub Actions workflow manually.
-
-GitHub Actions is intentionally manual-only (`workflow_dispatch`).
-
-## Next phase
-After this build is stable, connect the Android app to the Render backend and then add the live IPO/GMP data engine.
+GitHub Actions is manual only.
