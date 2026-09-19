@@ -1,6 +1,5 @@
 package com.iponinja.app
 
-import com.iponinja.app.BuildConfig
 
 import android.app.Application
 import android.content.Context
