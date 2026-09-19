@@ -40,3 +40,6 @@ Push the repository to GitHub. Actions builds a debug APK and uploads it as an a
 
 ## Product note
 GMP is unofficial and can differ between sources. IPO Ninja displays it as an estimate, never as a guaranteed return or recommendation.
+
+## Render shortcut
+A `render.yaml` is included. You can also configure the service manually with root `backend`, build `npm install`, start `npm start`, and health path `/health`.
