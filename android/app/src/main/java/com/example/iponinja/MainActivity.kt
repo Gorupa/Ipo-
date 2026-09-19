@@ -8,57 +8,51 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
-data class DemoIpo(
-    val id: String,
+private data class Ipo(
     val name: String,
-    val symbol: String,
-    val status: String,
-    val type: String,
-    val low: Int,
-    val high: Int,
-    val lot: Int,
-    val gmp: Int,
-    val subscription: Double,
-    val issueSize: String,
-    val open: String,
-    val close: String,
-    val allotment: String,
-    val listing: String
+    val dates: String,
+    val price: String,
+    val lot: String,
+    val gmp: String,
+    val gain: String,
+    val subscription: String
 )
 
 private val demoIpos = listOf(
-    DemoIpo("1","Example Technologies IPO","EXAMPLE","OPEN","Mainboard",700,735,20,85,2.91,"₹2,450 Cr","18 Sep 2026","22 Sep 2026","23 Sep 2026","25 Sep 2026"),
-    DemoIpo("2","Sample Consumer IPO","SAMPLE","UPCOMING","Mainboard",420,445,33,52,0.0,"₹1,180 Cr","24 Sep 2026","28 Sep 2026","29 Sep 2026","1 Oct 2026")
+    Ipo("Demo Technologies IPO", "Open • 24–26 Sep", "₹720–760", "19 shares", "₹125", "₹2,375", "18.4×"),
+    Ipo("Demo Healthcare IPO", "Upcoming • 30 Sep", "₹410–430", "34 shares", "₹70", "₹2,380", "—"),
+    Ipo("Demo Retail IPO", "Upcoming • 03 Oct", "₹280–295", "50 shares", "₹42", "₹2,100", "—")
 )
 
 class MainActivity : ComponentActivity() {
@@ -70,117 +64,227 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun IpoNinjaApp() {
-    var selected by remember { mutableStateOf<DemoIpo?>(null) }
-    if (selected == null) {
-        HomeScreen(onOpen = { selected = it })
-    } else {
-        DetailScreen(ipo = selected!!, onBack = { selected = null })
-    }
-}
+    var selected by remember { mutableStateOf<Ipo?>(null) }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun HomeScreen(onOpen: (DemoIpo) -> Unit) {
-    Scaffold(
-        topBar = { TopAppBar(title = { Text("IPO Ninja") }) }
-    ) { padding ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp),
-            contentPadding = PaddingValues(vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
-            item {
-                Text("IPO intelligence, simplified.", style = MaterialTheme.typography.headlineSmall)
-                Spacer(Modifier.height(4.dp))
-                Text("GMP • Subscription • Allotment", style = MaterialTheme.typography.bodyMedium)
-            }
-            item { Text("🔥 Live & Upcoming", style = MaterialTheme.typography.titleLarge) }
-
-            items(demoIpos) { ipo ->
-                IpoCard(ipo, onOpen)
-            }
-
-            item {
-                Text(
-                    "Demo data for the first UI build. GMP is unofficial and can change.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun IpoCard(ipo: DemoIpo, onOpen: (DemoIpo) -> Unit) {
-    val gain = ipo.gmp * ipo.lot
-    Card(
-        modifier = Modifier.fillMaxWidth().clickable { onOpen(ipo) },
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    MaterialTheme(
+        colorScheme = androidx.compose.material3.lightColorScheme(
+            primary = Color(0xFF315CFF),
+            onPrimary = Color.White,
+            background = Color(0xFFF7F8FA),
+            surface = Color.White,
+            onSurface = Color(0xFF17191D),
+            onSurfaceVariant = Color(0xFF6C7078)
+        )
     ) {
-        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Column(Modifier.weight(1f)) {
-                    Text(ipo.name, style = MaterialTheme.typography.titleLarge)
-                    Text(ipo.symbol, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-                Text(
-                    ipo.status,
-                    color = if (ipo.status == "OPEN") Color(0xFF169B70) else MaterialTheme.colorScheme.primary
-                )
+        Surface(modifier = Modifier.fillMaxSize(), color = Color(0xFFF7F8FA)) {
+            if (selected == null) {
+                HomeScreen(onIpoClick = { selected = it })
+            } else {
+                DetailScreen(selected!!, onBack = { selected = null })
             }
-            Text("₹${ipo.low} – ₹${ipo.high}")
-            Text("GMP ₹${ipo.gmp}  •  ${"%.1f".format(ipo.gmp.toDouble() / ipo.high * 100)}%",
-                style = MaterialTheme.typography.titleMedium)
-            Text("₹$gain estimated gain / lot", style = MaterialTheme.typography.titleMedium)
-            HorizontalDivider()
-            Text("Lot ${ipo.lot}  •  Subscription ${"%.2f".format(ipo.subscription)}×",
-                style = MaterialTheme.typography.bodySmall)
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DetailScreen(ipo: DemoIpo, onBack: () -> Unit) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(ipo.name) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) { Text("‹") }
+private fun HomeScreen(onIpoClick: (Ipo) -> Unit) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize().padding(horizontal = 18.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        item {
+            Spacer(Modifier.height(24.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    Modifier.size(38.dp).clip(RoundedCornerShape(12.dp))
+                        .background(Color(0xFF315CFF)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("N", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 19.sp)
                 }
+                Spacer(Modifier.size(10.dp))
+                Column {
+                    Text("IPO Ninja", fontSize = 21.sp, fontWeight = FontWeight.Bold)
+                    Text("Know the IPO. Decide yourself.", color = Color(0xFF777B83), fontSize = 12.sp)
+                }
+            }
+
+            Spacer(Modifier.height(22.dp))
+            Text("Today", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+            Text(
+                "A calm view of what's happening in IPOs.",
+                color = Color(0xFF777B83),
+                fontSize = 14.sp
             )
+            Spacer(Modifier.height(14.dp))
         }
-    ) { padding ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
-            contentPadding = PaddingValues(bottom = 28.dp)
+
+        item {
+            SummaryCard()
+        }
+
+        item {
+            Text("Open & upcoming", fontSize = 19.sp, fontWeight = FontWeight.SemiBold)
+        }
+
+        items(demoIpos) { ipo ->
+            IpoCard(ipo, onClick = { onIpoClick(ipo) })
+        }
+
+        item {
+            Spacer(Modifier.height(28.dp))
+            Text(
+                "GMP is unofficial market information and may change. IPO Ninja does not guarantee listing gains.",
+                color = Color(0xFF8A8D94),
+                fontSize = 11.sp,
+                lineHeight = 16.sp
+            )
+            Spacer(Modifier.height(28.dp))
+        }
+    }
+}
+
+@Composable
+private fun SummaryCard() {
+    Card(
+        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    ) {
+        Row(
+            Modifier.fillMaxWidth().padding(18.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            item { Text("₹${ipo.low} – ₹${ipo.high}", style = MaterialTheme.typography.headlineMedium) }
-            item { Text("GMP ₹${ipo.gmp}  •  ${"%.2f".format(ipo.gmp.toDouble() / ipo.high * 100)}%") }
-            item { Text("Estimated listing ₹${ipo.high + ipo.gmp}", style = MaterialTheme.typography.titleLarge) }
-            item { Text("Estimated gain / lot ₹${ipo.gmp * ipo.lot}") }
-            item { Text("Investment / lot ₹${ipo.high * ipo.lot}") }
+            Stat("Open", "1")
+            VerticalDivider(Modifier.height(42.dp), color = Color(0xFFE7E8EC))
+            Stat("Upcoming", "2")
+            VerticalDivider(Modifier.height(42.dp), color = Color(0xFFE7E8EC))
+            Stat("Watchlist", "0")
+        }
+    }
+}
 
-            item { Text("Subscription", style = MaterialTheme.typography.titleLarge) }
-            item { Text("Overall ${"%.2f".format(ipo.subscription)}×") }
+@Composable
+private fun Stat(label: String, value: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(value, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(label, color = Color(0xFF777B83), fontSize = 11.sp)
+    }
+}
 
-            item { Text("IPO details", style = MaterialTheme.typography.titleLarge) }
-            item { Text("Issue size: ${ipo.issueSize}\nType: ${ipo.type}\nLot size: ${ipo.lot}") }
-
-            item { Text("Important dates", style = MaterialTheme.typography.titleLarge) }
-            item { Text("Open: ${ipo.open}\nClose: ${ipo.close}\nAllotment: ${ipo.allotment}\nListing: ${ipo.listing}") }
-
-            item {
+@Composable
+private fun IpoCard(ipo: Ipo, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth().clickable { onClick() },
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    ) {
+        Column(Modifier.padding(17.dp)) {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
+            ) {
+                Column(Modifier.weight(1f)) {
+                    Text(ipo.name, fontSize = 17.sp, fontWeight = FontWeight.SemiBold)
+                    Spacer(Modifier.height(4.dp))
+                    Text(ipo.dates, color = Color(0xFF777B83), fontSize = 12.sp)
+                }
                 Text(
-                    "GMP is unofficial. Estimated listing price and gain are calculations, not guarantees.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    ipo.gmp,
+                    color = Color(0xFF16865A),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
                 )
             }
+
+            Spacer(Modifier.height(16.dp))
+
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                MiniStat("Price", ipo.price)
+                MiniStat("Lot", ipo.lot)
+                MiniStat("Est. gain", ipo.gain)
+            }
+
+            Spacer(Modifier.height(14.dp))
+
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Subscription ${ipo.subscription}", color = Color(0xFF777B83), fontSize = 12.sp)
+                Text("View details  ›", color = Color(0xFF315CFF), fontSize = 12.sp, fontWeight = FontWeight.Medium)
+            }
         }
+    }
+}
+
+@Composable
+private fun MiniStat(label: String, value: String) {
+    Column {
+        Text(label, color = Color(0xFF8A8D94), fontSize = 10.sp)
+        Spacer(Modifier.height(2.dp))
+        Text(value, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+    }
+}
+
+@Composable
+private fun DetailScreen(ipo: Ipo, onBack: () -> Unit) {
+    LazyColumn(
+        Modifier.fillMaxSize().padding(horizontal = 18.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        item {
+            Spacer(Modifier.height(20.dp))
+            TextButton(onClick = onBack) { Text("‹  Back") }
+            Spacer(Modifier.height(4.dp))
+            Text(ipo.name, fontSize = 27.sp, fontWeight = FontWeight.Bold)
+            Text(ipo.dates, color = Color(0xFF777B83), fontSize = 13.sp)
+            Spacer(Modifier.height(16.dp))
+        }
+
+        item {
+            Card(
+                shape = RoundedCornerShape(22.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
+            ) {
+                Column(Modifier.padding(18.dp)) {
+                    Text("GMP", color = Color(0xFF777B83), fontSize = 12.sp)
+                    Text(ipo.gmp, color = Color(0xFF16865A), fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                    Text("Unofficial estimate • demo data", color = Color(0xFF8A8D94), fontSize = 11.sp)
+                }
+            }
+        }
+
+        item {
+            DetailRow("Price band", ipo.price)
+            DetailRow("Lot size", ipo.lot)
+            DetailRow("Estimated gain / lot", ipo.gain)
+            DetailRow("Subscription", ipo.subscription)
+        }
+
+        item {
+            Spacer(Modifier.height(12.dp))
+            Text(
+                "IPO Ninja is an information tool. GMP and estimated gains are not guaranteed and should not be treated as investment advice.",
+                color = Color(0xFF777B83),
+                fontSize = 12.sp,
+                lineHeight = 17.sp
+            )
+            Spacer(Modifier.height(28.dp))
+        }
+    }
+}
+
+@Composable
+private fun DetailRow(label: String, value: String) {
+    Row(
+        Modifier.fillMaxWidth().padding(vertical = 13.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(label, color = Color(0xFF777B83), fontSize = 13.sp)
+        Text(value, fontWeight = FontWeight.Medium, fontSize = 13.sp)
     }
 }

@@ -1,32 +1,18 @@
-# IPO Ninja
+# IPO Ninja — Light Clean MVP
 
-A simple consumer-facing Indian IPO companion.
+A clean, lightweight Android MVP for tracking Indian IPOs.
 
-## Android MVP
-This build intentionally has **zero network/data-provider dependencies** in the Android app so the APK can build reliably while the UI is finalized.
+## Design
+- Light-first, calm, premium fintech UI
+- Simple card-based home
+- No dark theme
+- Demo/local IPO data for the first reliable build
+- No Retrofit, ViewModel, Navigation, Gson, or network dependencies
 
-It includes:
-- IPO home
-- Open/upcoming cards
-- GMP
-- GMP percentage
-- Estimated listing
-- Estimated gain per lot
-- Subscription snapshot
-- IPO details
-- Important dates
+## Build
+Open the `android` folder in Android Studio, or run the GitHub Actions workflow manually.
 
-The Android MVP uses demo data. The Render backend is separate and ready for the next data-engine phase.
-
-## GitHub Actions
-Workflow is manual-only:
-GitHub -> Actions -> IPO Ninja Android Build -> Run workflow.
-
-## Render
-The `render.yaml` deploys the Node backend from `backend`:
-- Build: `npm install`
-- Start: `npm start`
-- Health: `/health`
+GitHub Actions is intentionally manual-only (`workflow_dispatch`).
 
 ## Next phase
-Connect the Render API/data collector after the UI build is confirmed.
+After this build is stable, connect the Android app to the Render backend and then add the live IPO/GMP data engine.
