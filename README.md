@@ -43,3 +43,6 @@ GMP is unofficial and can differ between sources. IPO Ninja displays it as an es
 
 ## Render shortcut
 A `render.yaml` is included. You can also configure the service manually with root `backend`, build `npm install`, start `npm start`, and health path `/health`.
+
+## Android build
+The project targets Java/Kotlin JVM 17. GitHub Actions is manual-only via `workflow_dispatch`.
